@@ -15,14 +15,16 @@ def cadastrar_vendedor(request):
     return render(request, 'cadastrar_vendedor.html', {'vendedores': vendedores})
 
   if request.method == "POST":
-    email = request.POST.get('email')
-    senha = request.POST.get('senha')
+    nome      = request.POST.get('nome')
+    sobrenome = request.POST.get('sobrenome')
+    email     = request.POST.get('email')
+    senha     = request.POST.get('senha')
 
     user = Users.objects.filter(email=email)
     if user.exists():
       return HttpResponse('E-mail ja existe')
 
-    user = Users.objects.create_user(username=email, email=email, password=senha, cargo='V')
+    user = Users.objects.create_user(username=email, email=email, password=senha, first_name=nome, last_name=sobrenome,cargo='V')
 
     return HttpResponse('Conta criada')
 
@@ -33,8 +35,8 @@ def login(request):
       return redirect(reverse('plataforma'))
     return render(request, 'login.html')
   elif request.method == "POST":
-    login = request.POST.get('email')
-    senha = request.POST.get('senha')
+    login     = request.POST.get('email')
+    senha     = request.POST.get('senha')
 
     user = auth.authenticate(username=login, password=senha)
     if not user:
